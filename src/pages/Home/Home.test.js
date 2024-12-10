@@ -1,7 +1,8 @@
 import Home from ".";
 import { render, screen } from "test-utils";
 import userEvent from "@testing-library/user-event";
-import { rotaAnuncie } from "routes";
+import { rotaAnuncie, rotaCategoria } from "routes";
+import mockCategorias from "mocks/categorias";
 
 const mockNavigate = jest.fn();
 
@@ -28,13 +29,34 @@ describe("Testando a página Home", () => {
     });
   });
 
-  describe("Categorias", () => {});
+  describe("Categorias", () => {
+    test("Deve renderizar a página Home com categorias", async () => {
+      render(<Home />);
 
-  test("Deve renderizar a página Home com categorias", async () => {
-    render(<Home />);
+      const categorias = await screen.findAllByTestId("home-categorias");
 
-    const categorias = await screen.findAllByTestId("home-categorias");
+      expect(categorias).toHaveLength(2);
+    });
 
-    expect(categorias).toHaveLength(2);
+    test("Deve redirecionar para o id da categoria", async () => {
+      render(<Home />);
+
+      const categorias = await screen.findAllByTestId("home-categorias");
+      const primeiraCategoria = categorias[0];
+
+      userEvent.click(primeiraCategoria);
+
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/${rotaCategoria}/${mockCategorias[0].id}`
+      );
+
+      const segundaCategoria = categorias[1];
+
+      userEvent.click(segundaCategoria);
+
+      expect(mockNavigate).toHaveBeenCalledWith(
+        `/${rotaCategoria}/${mockCategorias[1].id}`
+      );
+    });
   });
 });
