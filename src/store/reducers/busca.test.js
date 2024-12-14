@@ -8,4 +8,8 @@ describe("testando busca reducer", () => {
   test("deve resetar busca como esperado", () => {
     expect(buscaReducer("outro valor", resetarBusca())).toEqual("");
   });
+
+  test("deve mudar de volante para fone", () => {
+    expect(buscaReducer("volante", mudarBusca("fone"))).toEqual("fone");
+  });
 });
